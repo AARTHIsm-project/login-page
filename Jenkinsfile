@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo ' Cloning repository from GitHub...'
-                git 'https://github.com/yourusername/login-page-project.git'
+                git 'https://github.com/AARTHIsm-project/login-page'
             }
         }
 
@@ -19,9 +19,9 @@ pipeline {
                 echo ' Checking for README.md...'
                 sh '''
                     if [ -f "README.md" ]; then
-                        echo "✅ README.md found."
+                        echo " README.md found."
                     else
-                        echo "❌ README.md not found. Aborting pipeline."
+                        echo " README.md not found. Aborting pipeline."
                         exit 1
                     fi
                 '''
