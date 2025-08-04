@@ -34,8 +34,8 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo " Running $DEPLOY_SCRIPT..."
-                bat "$DEPLOY_SCRIPT"
+                echo " Running deloy.bat"
+                bat "deploy.bat"
             }
         }
     }
