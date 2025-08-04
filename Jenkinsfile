@@ -1,62 +1,57 @@
 pipeline {
-    agent any
+    agent any   // Use any available machine (agent) to run the pipeline
 
     environment {
-        DEPLOY_SCRIPT = './deploy.sh'
+        DEPLOY_SCRIPT = './deploy.sh'  // Reusable variable for your deploy script
     }
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                echo ' Cloning repository from GitHub...'
-                git 'https://github.com/AARTHIsm-project/login-page'
-            }
-        }
-
+        // Stage 1: Check for README.md file
         stage('Verify README.md') {
             steps {
-                echo ' Checking for README.md...'
+                echo '🔍 Checking if README.md exists...'
                 sh '''
                     if [ -f "README.md" ]; then
-                        echo " README.md found."
+                        echo " README.md is present."
                     else
-                        echo " README.md not found. Aborting pipeline."
+                        echo " README.md is missing. Stopping pipeline."
                         exit 1
                     fi
                 '''
             }
         }
 
+        // Stage 2: Build (for HTML/CSS there's nothing to build, just info)
         stage('Build') {
             steps {
-                echo ' (Optional) Build stage for static files...'
-                // For static HTML/CSS, build is usually skipped
-                // Add asset minification or bundling if needed
+                echo ' Nothing to build for static files, skipping...'
             }
         }
 
+        // Stage 3: Test (this is just a placeholder)
         stage('Test') {
             steps {
-                echo ' No formal tests for static HTML, just placeholder...'
-                // Optionally add HTML validator or accessibility check here
+                echo ' No real tests, just a demo message...'
             }
         }
 
+        // Stage 4: Deploy
         stage('Deploy') {
             steps {
-                echo "Running deployment script: $DEPLOY_SCRIPT"
-                sh "$DEPLOY_SCRIPT"
+                echo " Starting deployment using $DEPLOY_SCRIPT"
+                sh "$DEPLOY_SCRIPT"  // Run the deploy.sh script
             }
         }
     }
 
+    // After the stages finish, report success or failure
     post {
         success {
-            echo ' Pipeline completed successfully.'
+            echo ' Everything worked! App deployed successfully.'
         }
         failure {
-            echo ' Pipeline failed. Please check the logs.'
+            echo 'Something went wrong. Check the logs above.'
         }
     }
 }
