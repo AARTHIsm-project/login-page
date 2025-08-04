@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building project...'
+                // Add your build steps here
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Add your test steps here
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                expression {
+                    // Deploy only if README or README.md exists
+                    return fileExists('README') || fileExists('README.md')
+                }
+            }
+            steps {
+                echo 'README found. Deploying to live environment...'
+                // Your deploy commands here
+                sh 'echo Deploying application...'
+            }
+        }
+    }
+}
