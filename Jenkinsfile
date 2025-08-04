@@ -1,57 +1,51 @@
 pipeline {
-    agent any   // Use any available machine (agent) to run the pipeline
+    agent any
 
     environment {
-        DEPLOY_SCRIPT = './deploy.sh'  // Reusable variable for your deploy script
+        DEPLOY_SCRIPT = 'deploy.bat'  // Windows batch file
     }
 
     stages {
-
-        // Stage 1: Check for README.md file
         stage('Verify README.md') {
             steps {
-                echo '🔍 Checking if README.md exists...'
-                sh '''
-                    if [ -f "README.md" ]; then
-                        echo " README.md is present."
-                    else
-                        echo " README.md is missing. Stopping pipeline."
-                        exit 1
-                    fi
+                echo ' Checking if README.md exists...'
+                bat '''
+                    if exist README.md (
+                        echo  README.md found.
+                    ) else (
+                        echo  README.md not found.
+                        exit /b 1
+                    )
                 '''
             }
         }
 
-        // Stage 2: Build (for HTML/CSS there's nothing to build, just info)
         stage('Build') {
             steps {
-                echo ' Nothing to build for static files, skipping...'
+                echo ' No build needed for static HTML...'
             }
         }
 
-        // Stage 3: Test (this is just a placeholder)
         stage('Test') {
             steps {
-                echo ' No real tests, just a demo message...'
+                echo ' No tests, just a placeholder...'
             }
         }
 
-        // Stage 4: Deploy
         stage('Deploy') {
             steps {
-                echo " Starting deployment using $DEPLOY_SCRIPT"
-                sh "$DEPLOY_SCRIPT"  // Run the deploy.sh script
+                echo " Running $DEPLOY_SCRIPT..."
+                bat "$DEPLOY_SCRIPT"
             }
         }
     }
 
-    // After the stages finish, report success or failure
     post {
         success {
-            echo ' Everything worked! App deployed successfully.'
+            echo ' Pipeline completed successfully!'
         }
         failure {
-            echo 'Something went wrong. Check the logs above.'
+            echo ' Pipeline failed. Check above logs.'
         }
     }
 }
